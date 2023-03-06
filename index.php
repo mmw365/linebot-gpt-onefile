@@ -43,9 +43,9 @@ function send_chatgpt($inputText) {
         'Content-Type: application/json; charser=UTF-8',
         'Authorization: Bearer ' . $apiKey
     ));
-    $content = json_decode(curl_exec($ch), true);
+    $content = json_decode(curl_exec($ch));
     curl_close($ch);
-    return $content['choices'][0]['message']['content'];
+    return $content->{'choices'}[0]->{'message'}->{'content'}
 }
 
 $inputJsonMsg = file_get_contents('php://input');
