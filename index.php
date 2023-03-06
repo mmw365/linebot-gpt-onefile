@@ -45,7 +45,7 @@ function send_chatgpt($inputText) {
     ));
     $content = json_decode(curl_exec($ch));
     curl_close($ch);
-    return $content->{'choices'}[0]->{'message'}->{'content'}
+    return $content->{'choices'}[0]->{'message'}->{'content'};
 }
 
 $inputJsonMsg = file_get_contents('php://input');
