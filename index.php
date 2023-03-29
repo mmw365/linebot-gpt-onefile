@@ -3,24 +3,29 @@ $accessToken = "LINEのアクセストークン";
 $apiKey = "OPENAIのAPIキー";
 $systemMessage = "あなたは100文字程度で分かりやすく答えてくれます。";
 
-function send_reply_message($replyToken, $responseText) {
-    global $accessToken;
-    $response = json_encode([
-        "replyToken" => $replyToken,
-        "messages" => [["type" => "text", "text" => $responseText]]
-    ]);
-    
-    $ch = curl_init("https://api.line.me/v2/bot/message/reply");
+function send_json_with_auth_token($url, $message, $token) {
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $response);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $message);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json; charser=UTF-8',
-        'Authorization: Bearer ' . $accessToken
+        'Authorization: Bearer ' . $token
     ));
     curl_exec($ch);
+    $response = json_decode(curl_exec($ch));
     curl_close($ch);
+    return $response;
+}
+
+function send_reply_message($replyToken, $responseText) {
+    global $accessToken;
+    $message = json_encode([
+        "replyToken" => $replyToken,
+        "messages" => [["type" => "text", "text" => $responseText]]
+    ]);
+    send_json_with_auth_token("https://api.line.me/v2/bot/message/reply", $message, $accessToken);
 }
 
 function send_chatgpt($message) {
@@ -30,17 +35,7 @@ function send_chatgpt($message) {
         "messages" => $message,
     ]);
     
-    $ch = curl_init("https://api.openai.com/v1/chat/completions");
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json; charser=UTF-8',
-        'Authorization: Bearer ' . $apiKey
-    ));
-    $content = json_decode(curl_exec($ch));
-    curl_close($ch);
+    $content = send_json_with_auth_token("https://api.openai.com/v1/chat/completions", $request, $apiKey);
     return $content->{'choices'}[0]->{'message'}->{'content'};
 }
 
