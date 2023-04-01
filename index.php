@@ -1,6 +1,6 @@
 <?php
-$accessToken = "LINEのアクセストークン";
-$apiKey = "OPENAIのAPIキー";
+$accessToken = "LINE Channel Access Token";
+$apiKey = "OpenAI API Key";
 $systemMessage = "あなたは100文字程度で分かりやすく答えてくれます。";
 
 function send_json_with_auth_token($url, $message, $token) {

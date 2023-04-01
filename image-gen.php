@@ -1,7 +1,6 @@
 <?php
-
-$accessToken = "LINEのアクセストークン";
-$apiKey = "OPENAIのAPIキー";
+$accessToken = "LINE Channel Access Token";
+$apiKey = "OpenAI API Key";
 
 function send_json_with_auth_token($url, $message, $token) {
     $ch = curl_init($url);
