@@ -7,6 +7,7 @@ OpenAIのAPIを使ったPHPの1ファイルで作ったチャットボットで�
 - index.php　ChatGPTを使った会話用チャットボット
 - image-gen.phop DELL-Eを使った言葉から画像を作成するチャットボット
 - image-var.phop DELL-Eを使った画像の別バージョンを作成するチャットボット
+- image-gen-var.php 言葉から画像生成、画像から別のバージョンを作成するチャットボット
 
 ## 使い方
 
